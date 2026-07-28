@@ -18,28 +18,28 @@ const diagnosticSections = [
     id: "overs",
     label: "DIAGNÓSTICO INICIAL",
     title: "Los 3 Overs",
-    subtitle: "Identifica dónde se está drenando la energía de tu cliente",
+    subtitle: "Identifica dónde se está drenando tu energía",
     color: COLORS.gold,
     questions: [
       {
         id: "o1",
         over: "OVERWORKED",
-        text: "¿Con qué frecuencia tu cliente trabaja más de lo necesario por miedo a que el resultado no sea perfecto?",
-        options: ["Casi siempre — es su patrón dominante", "Con frecuencia — especialmente en proyectos visibles", "A veces — en momentos de presión", "Rara vez — tiene esto bajo control"],
+        text: "¿Con qué frecuencia trabajas más de lo necesario por miedo a que el resultado no sea perfecto?",
+        options: ["Casi siempre — es mi patrón dominante", "Con frecuencia — especialmente en proyectos visibles", "A veces — en momentos de presión", "Rara vez — tengo esto bajo control"],
         scores: [4, 3, 2, 1],
       },
       {
         id: "o2",
         over: "OVERCOMMITTED",
-        text: "¿Tu cliente dice sí a responsabilidades que no están en su descripción de puesto (office housework)?",
-        options: ["Sí, constantemente y lo resiente", "Sí, lo hace pero empieza a cuestionarlo", "A veces, en situaciones específicas", "No, tiene límites claros en esto"],
+        text: "¿Dices sí a responsabilidades que no están en tu descripción de puesto (office housework)?",
+        options: ["Sí, constantemente y lo resiento", "Sí, lo hago pero empiezo a cuestionarlo", "A veces, en situaciones específicas", "No, tengo límites claros en esto"],
         scores: [4, 3, 2, 1],
       },
       {
         id: "o3",
         over: "OVERWHELMED",
-        text: "¿Cómo describe tu cliente su estado energético al final de una semana típica?",
-        options: ["Agotada — siente que no alcanza nada importante", "Ocupada — mucho movimiento, poco impacto estratégico", "Funcional — entrega pero sin energía para más", "Enfocada — gestiona bien sus prioridades"],
+        text: "¿Cómo describes tu estado energético al final de una semana típica?",
+        options: ["Agotada — siento que no alcanzo nada importante", "Ocupada — mucho movimiento, poco impacto estratégico", "Funcional — entrego pero sin energía para más", "Enfocada — gestiono bien mis prioridades"],
         scores: [4, 3, 2, 1],
       },
     ],
@@ -48,25 +48,25 @@ const diagnosticSections = [
     id: "P",
     label: "PILAR P",
     title: "Propósito — Llamado Visible",
-    subtitle: "¿Tiene claridad sobre quién es y para qué quiere el nivel siguiente?",
+    subtitle: "¿Tienes claridad sobre quién eres y para qué quieres el nivel siguiente?",
     color: "#2D6A4F",
     questions: [
       {
         id: "p1",
-        text: "¿Puede tu cliente articular en 1–2 oraciones por qué específicamente quiere llegar a VP (más allá del título)?",
-        options: ["No — no lo ha pensado con claridad", "Vagamente — habla de 'querer más impacto' sin especificar", "En desarrollo — tiene una idea pero no está pulida", "Sí — lo expresa con claridad y convicción"],
+        text: "¿Puedes articular en 1–2 oraciones por qué específicamente quieres llegar a VP (más allá del título)?",
+        options: ["No — no lo he pensado con claridad", "Vagamente — hablo de 'querer más impacto' sin especificar", "En desarrollo — tengo una idea pero no está pulida", "Sí — lo expreso con claridad y convicción"],
         scores: [4, 3, 2, 1],
       },
       {
         id: "p2",
-        text: "¿Qué tan visible es tu cliente ante los líderes senior de su organización?",
-        options: ["Invisible — nadie la conoce más allá de su área", "Conocida como ejecutora confiable, no como estratega", "Tiene algo de visibilidad pero no consistente", "Es conocida y reconocida como estratega en múltiples niveles"],
+        text: "¿Qué tan visible eres ante los líderes senior de tu organización?",
+        options: ["Invisible — nadie me conoce más allá de mi área", "Conocida como ejecutora confiable, no como estratega", "Tengo algo de visibilidad pero no consistente", "Soy conocida y reconocida como estratega en múltiples niveles"],
         scores: [4, 3, 2, 1],
       },
       {
         id: "p3",
-        text: "¿Tu cliente ha aprendido a minimizar aspectos de su identidad (calidez, acento, perspectiva cultural) para 'encajar'?",
-        options: ["Sí — activamente se reduce para generar menos fricción", "Con frecuencia — especialmente en espacios de poder", "A veces — en situaciones de alta visibilidad", "No — lidera desde su identidad completa"],
+        text: "¿Has aprendido a minimizar aspectos de tu identidad (calidez, acento, perspectiva cultural) para 'encajar'?",
+        options: ["Sí — activamente me reduzco para generar menos fricción", "Con frecuencia — especialmente en espacios de poder", "A veces — en situaciones de alta visibilidad", "No — lidero desde mi identidad completa"],
         scores: [4, 3, 2, 1],
       },
     ],
@@ -75,25 +75,25 @@ const diagnosticSections = [
     id: "E",
     label: "PILAR E",
     title: "Energía — Inteligencia Energética",
-    subtitle: "¿Gestiona su energía como activo estratégico o la está agotando?",
+    subtitle: "¿Gestionas tu energía como activo estratégico o la estás agotando?",
     color: "#9B2335",
     questions: [
       {
         id: "e1",
-        text: "¿Tu cliente tiene bloques de tiempo protegidos en su semana para trabajo estratégico (sin reuniones ni correos)?",
-        options: ["No — su agenda está completamente controlada por otros", "Rara vez — lo intenta pero siempre cede", "Tiene algo pero es inconsistente", "Sí — protege tiempo estratégico semanalmente"],
+        text: "¿Tienes bloques de tiempo protegidos en tu semana para trabajo estratégico (sin reuniones ni correos)?",
+        options: ["No — mi agenda está completamente controlada por otros", "Rara vez — lo intento pero siempre cedo", "Tengo algo pero es inconsistente", "Sí — protejo tiempo estratégico semanalmente"],
         scores: [4, 3, 2, 1],
       },
       {
         id: "e2",
-        text: "¿Cómo delega tu cliente responsabilidades a su equipo?",
-        options: ["No delega — necesita revisar y controlar todo", "Delega poco — confía con dificultad", "Delega algunas cosas pero retiene demasiado", "Delega bien — libera su energía para lo estratégico"],
+        text: "¿Cómo delegas responsabilidades a tu equipo?",
+        options: ["No delego — necesito revisar y controlar todo", "Delego poco — confío con dificultad", "Delego algunas cosas pero retengo demasiado", "Delego bien — libero mi energía para lo estratégico"],
         scores: [4, 3, 2, 1],
       },
       {
         id: "e3",
-        text: "¿Tu cliente distingue entre estar ocupada y tener rendimiento sostenible?",
-        options: ["No — confunde actividad con impacto constantemente", "Lo entiende intelectualmente pero no lo practica", "Lo practica a veces, no de forma sistemática", "Sí — gestiona su agenda desde el impacto estratégico"],
+        text: "¿Distingues entre estar ocupada y tener rendimiento sostenible?",
+        options: ["No — confundo actividad con impacto constantemente", "Lo entiendo intelectualmente pero no lo practico", "Lo practico a veces, no de forma sistemática", "Sí — gestiono mi agenda desde el impacto estratégico"],
         scores: [4, 3, 2, 1],
       },
     ],
@@ -102,25 +102,25 @@ const diagnosticSections = [
     id: "A",
     label: "PILAR A",
     title: "Autenticidad — Alineación e Identidad",
-    subtitle: "¿Lidera desde quien es o desde quien esperan que sea?",
+    subtitle: "¿Lideras desde quien eres o desde quien esperan que seas?",
     color: "#4A3728",
     questions: [
       {
         id: "a1",
-        text: "¿Qué tan coherentes son los valores declarados de tu cliente con sus acciones bajo presión?",
-        options: ["Hay una brecha significativa — actúa diferente bajo presión", "A veces coherente, a veces no — es inconsistente", "Mayormente coherente con algunos puntos ciegos", "Alta coherencia — sus valores guían sus decisiones bajo presión"],
+        text: "¿Qué tan coherentes son tus valores declarados con tus acciones bajo presión?",
+        options: ["Hay una brecha significativa — actúo diferente bajo presión", "A veces coherente, a veces no — soy inconsistente", "Mayormente coherente con algunos puntos ciegos", "Alta coherencia — mis valores guían mis decisiones bajo presión"],
         scores: [4, 3, 2, 1],
       },
       {
         id: "a2",
-        text: "¿Tu cliente tiene dificultad para expresar su perspectiva en reuniones con liderazgo senior?",
-        options: ["Sí — se minimiza, suaviza ideas o espera que otros hablen", "Con frecuencia — especialmente si percibe resistencia", "A veces — en contextos de alta visibilidad o conflicto", "No — expresa su perspectiva con claridad y convicción"],
+        text: "¿Tienes dificultad para expresar tu perspectiva en reuniones con liderazgo senior?",
+        options: ["Sí — me minimizo, suavizo ideas o espero que otros hablen", "Con frecuencia — especialmente si percibo resistencia", "A veces — en contextos de alta visibilidad o conflicto", "No — expreso mi perspectiva con claridad y convicción"],
         scores: [4, 3, 2, 1],
       },
       {
         id: "a3",
-        text: "¿Cómo maneja tu cliente el 'office housework' (trabajo no reconocido asignado desproporcionadamente)?",
-        options: ["Lo absorbe todo sin cuestionar — tiene límites muy porosos", "Lo reconoce como problema pero no sabe cómo cambiarlo", "Ha mejorado pero aún le cuesta decir no con claridad", "Tiene límites claros y los mantiene con gracia"],
+        text: "¿Cómo manejas el 'office housework' (trabajo no reconocido asignado desproporcionadamente)?",
+        options: ["Lo absorbo todo sin cuestionar — tengo límites muy porosos", "Lo reconozco como problema pero no sé cómo cambiarlo", "He mejorado pero aún me cuesta decir no con claridad", "Tengo límites claros y los mantengo con gracia"],
         scores: [4, 3, 2, 1],
       },
     ],
@@ -129,25 +129,25 @@ const diagnosticSections = [
     id: "K",
     label: "PILAR K",
     title: "Key Results — Impacto Visible",
-    subtitle: "¿Sus resultados son conocidos por quienes deciden su futuro?",
+    subtitle: "¿Tus resultados son conocidos por quienes deciden tu futuro?",
     color: "#1B4F8A",
     questions: [
       {
         id: "k1",
-        text: "¿Puede tu cliente articular sus 3 resultados de mayor impacto de los últimos 24 meses con datos y contexto organizacional?",
-        options: ["No — tiene logros pero no los ha documentado estratégicamente", "Puede listar actividades pero no impacto medible", "Tiene algunos resultados articulados pero incompletos", "Sí — tiene una narrativa de impacto clara y con métricas"],
+        text: "¿Puedes articular tus 3 resultados de mayor impacto de los últimos 24 meses con datos y contexto organizacional?",
+        options: ["No — tengo logros pero no los he documentado estratégicamente", "Puedo listar actividades pero no impacto medible", "Tengo algunos resultados articulados pero incompletos", "Sí — tengo una narrativa de impacto clara y con métricas"],
         scores: [4, 3, 2, 1],
       },
       {
         id: "k2",
-        text: "¿Tu cliente ha tenido una conversación directa con su líder sobre su ambición de llegar a VP?",
-        options: ["No — no ha nombrado su ambición explícitamente", "Lo ha insinuado pero nunca dicho directamente", "Lo ha mencionado una vez, sin profundizar", "Sí — tiene conversaciones activas sobre su plan de ascenso"],
+        text: "¿Has tenido una conversación directa con tu líder sobre tu ambición de llegar a VP?",
+        options: ["No — no he nombrado mi ambición explícitamente", "Lo he insinuado pero nunca dicho directamente", "Lo he mencionado una vez, sin profundizar", "Sí — tengo conversaciones activas sobre mi plan de ascenso"],
         scores: [4, 3, 2, 1],
       },
       {
         id: "k3",
-        text: "¿Tiene tu cliente un sponsor activo (no solo mentor) que mueva su nombre en conversaciones donde ella no está?",
-        options: ["No — avanza completamente en solitario", "Tiene mentores pero ningún sponsor activo", "Tiene relaciones potenciales pero no las ha activado", "Sí — tiene al menos un sponsor activo en su organización"],
+        text: "¿Tienes un sponsor activo (no solo mentor) que mueva tu nombre en conversaciones donde tú no estás?",
+        options: ["No — avanzo completamente en solitario", "Tengo mentores pero ningún sponsor activo", "Tengo relaciones potenciales pero no las he activado", "Sí — tengo al menos un sponsor activo en mi organización"],
         scores: [4, 3, 2, 1],
       },
     ],
@@ -155,9 +155,9 @@ const diagnosticSections = [
 ];
 
 const getOversProfile = (score) => {
-  if (score >= 10) return { label: "Alerta crítica", color: "#C0392B", desc: "Los 3 Overs están activos simultáneamente. Primera prioridad: estabilizar la energía antes de cualquier trabajo estratégico." };
-  if (score >= 7) return { label: "Zona de riesgo", color: "#E67E22", desc: "Uno o dos Overs dominantes. Hay espacio para trabajar posicionamiento, pero la energía necesita atención paralela." };
-  return { label: "Funcional", color: "#27AE60", desc: "Los Overs no son la barrera principal. El trabajo puede centrarse directamente en posicionamiento y visibilidad." };
+  if (score >= 10) return { label: "Alerta crítica", color: "#C0392B", desc: "Los 3 Overs están activos simultáneamente. Primera prioridad: estabilizar tu energía antes de cualquier trabajo estratégico." };
+  if (score >= 7) return { label: "Zona de riesgo", color: "#E67E22", desc: "Uno o dos Overs dominantes. Hay espacio para trabajar posicionamiento, pero tu energía necesita atención paralela." };
+  return { label: "Funcional", color: "#27AE60", desc: "Los Overs no son tu barrera principal. El trabajo puede centrarse directamente en posicionamiento y visibilidad." };
 };
 
 const getPeakProfile = (scores) => {
@@ -168,8 +168,8 @@ const getPeakProfile = (scores) => {
 
 const getReadinessLevel = (total) => {
   if (total >= 42) return { level: "Lista para VP", color: "#27AE60", pct: 90, desc: "Posicionamiento sólido. El trabajo es refinar narrativa y activar sponsors." };
-  if (total >= 30) return { level: "En construcción estratégica", color: COLORS.gold, pct: 60, desc: "Base importante. Necesita estructura, visibilidad y 1–2 shifts críticos." };
-  if (total >= 18) return { level: "Zona de reenfoque", color: "#E67E22", pct: 35, desc: "Sus resultados son más sólidos de lo que su posicionamiento refleja. El gap está en visibilidad y narrativa." };
+  if (total >= 30) return { level: "En construcción estratégica", color: COLORS.gold, pct: 60, desc: "Base importante. Necesitas estructura, visibilidad y 1–2 shifts críticos." };
+  if (total >= 18) return { level: "Zona de reenfoque", color: "#E67E22", pct: 35, desc: "Tus resultados son más sólidos de lo que tu posicionamiento refleja. El gap está en visibilidad y narrativa." };
   return { level: "Inicio del recorrido", color: "#C0392B", pct: 15, desc: "Trabajo profundo de identidad y energía antes de posicionamiento. Gran potencial, camino claro." };
 };
 
@@ -269,10 +269,10 @@ function DiagnosticoVisible() {
             Marco PEAK · VP Readiness
           </p>
           <p style={{ color: "#AAA", fontSize: "1rem", lineHeight: 1.7, marginBottom: "2.5rem", fontStyle: "italic" }}>
-            Este protocolo evalúa los 3 Overs y los 4 pilares del Marco PEAK para identificar exactamente dónde está el gap entre el nivel actual de tu cliente y el nivel VP.
+            Este protocolo evalúa los 3 Overs y los 4 pilares del Marco PEAK para identificar exactamente dónde está el gap entre tu nivel actual y el nivel VP.
           </p>
           <div style={{ background: "#1A1A1A", border: "1px solid #333", borderRadius: 12, padding: "1.5rem", marginBottom: "1rem", textAlign: "left" }}>
-            <p style={{ color: "#888", fontSize: "0.75rem", letterSpacing: "0.1em", fontFamily: "monospace", marginBottom: "0.75rem" }}>NOMBRE DE LA CLIENTE (OPCIONAL)</p>
+            <p style={{ color: "#888", fontSize: "0.75rem", letterSpacing: "0.1em", fontFamily: "monospace", marginBottom: "0.75rem" }}>TU NOMBRE (OPCIONAL)</p>
             <input
               value={clientName}
               onChange={e => setClientName(e.target.value)}
@@ -338,9 +338,9 @@ function DiagnosticoVisible() {
     const priorityShifts = () => {
       const low = Object.entries(peakScores).sort((a,b) => b[1]-a[1]).slice(0,2).map(([k]) => k);
       const shiftMap = {
-        P: "Shift 1 & 2 — Claridad estratégica e influencia: tu cliente necesita definir su Llamado Visible y pasar de acumular habilidades a construir influencia.",
-        E: "Shift 3 — Disponibilidad ilimitada → acción estratégica: rediseñar la agenda, delegar y proteger energía para lo que posiciona VP.",
-        A: "Shift 4 — Reconfiguración de identidad: trabajar la autoexigencia silenciosa y autorizar a tu cliente a ocupar el espacio que ya se ganó.",
+        P: "Shift 1 & 2 — Claridad estratégica e influencia: necesitas definir tu Llamado Visible y pasar de acumular habilidades a construir influencia.",
+        E: "Shift 3 — Disponibilidad ilimitada → acción estratégica: rediseñar tu agenda, delegar y proteger energía para lo que posiciona VP.",
+        A: "Shift 4 — Reconfiguración de identidad: trabajar la autoexigencia silenciosa y autorizarte a ocupar el espacio que ya te ganaste.",
         K: "Shift 5 & narrativa — Acompañamiento estratégico: activar sponsors, construir portafolio de impacto y narrativa de 90 segundos."
       };
       return low.map(k => shiftMap[k]);
@@ -355,7 +355,7 @@ function DiagnosticoVisible() {
               RESULTADOS DEL DIAGNÓSTICO
             </div>
             <h1 style={{ fontSize: "clamp(1.8rem, 5vw, 2.5rem)", fontWeight: 400, color: COLORS.white, margin: "0 0 0.5rem" }}>
-              {clientName ? clientName : "Tu Cliente"}
+              {clientName ? clientName : "Tú"}
             </h1>
             {email && (
               <p style={{ color: COLORS.gold, fontFamily: "monospace", fontSize: "0.8rem", letterSpacing: "0.05em", margin: "0 0 0.35rem" }}>{email}</p>
@@ -427,7 +427,7 @@ function DiagnosticoVisible() {
 
           {/* Priority Shifts */}
           <div style={{ background: "#0D0D0D", border: `1px solid ${COLORS.gold}44`, borderRadius: 12, padding: "1.5rem", marginBottom: "1.5rem" }}>
-            <p style={{ color: COLORS.gold, fontFamily: "monospace", fontSize: "0.75rem", letterSpacing: "0.12em", marginBottom: "1.25rem" }}>SHIFTS PRIORITARIOS PARA ESTA CLIENTE</p>
+            <p style={{ color: COLORS.gold, fontFamily: "monospace", fontSize: "0.75rem", letterSpacing: "0.12em", marginBottom: "1.25rem" }}>TUS SHIFTS PRIORITARIOS</p>
             <div style={{ display: "grid", gap: "0.85rem" }}>
               {priorityShifts().map((shift, i) => (
                 <div key={i} style={{ display: "flex", gap: "0.75rem", alignItems: "flex-start" }}>
@@ -463,7 +463,7 @@ function DiagnosticoVisible() {
               onClick={restartDiagnostic}
               style={{ background: "transparent", border: `1px solid ${COLORS.gold}`, color: COLORS.gold, padding: "0.85rem", fontFamily: "monospace", fontSize: "0.8rem", letterSpacing: "0.08em", cursor: "pointer", borderRadius: 4 }}
             >
-              ← Nueva cliente
+              ← Nuevo diagnóstico
             </button>
             <button
               onClick={() => window.print?.()}
@@ -582,4 +582,3 @@ function DiagnosticoVisible() {
 
 const root = createRoot(document.getElementById("root"));
 root.render(<DiagnosticoVisible />);
-  

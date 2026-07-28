@@ -186,6 +186,20 @@ function DiagnosticoVisible() {
   const isValidEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
   const emailOk = isValidEmail(email);
 
+  // Google Sheet endpoint (Apps Script Web App). Fire-and-forget logging.
+  const SHEET_ENDPOINT = "https://script.google.com/macros/s/AKfycbxHvDaqUPspRZxX5gM603WfJLGneVxEFRl-9n249lH9RM06aqmf4JrjQ4MkQdnuIVyC6Q/exec";
+  const logToSheet = (payload) => {
+    if (!SHEET_ENDPOINT) return;
+    try {
+      fetch(SHEET_ENDPOINT, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(payload),
+      }).catch(() => {});
+    } catch (e) { /* never block the UI on logging */ }
+  };
+
   const section = diagnosticSections[currentSection];
   const question = section?.questions[currentQ];
   const totalQuestions = diagnosticSections.reduce((a, s) => a + s.questions.length, 0);
@@ -205,17 +219,27 @@ function DiagnosticoVisible() {
       setCurrentSection(currentSection + 1);
       setCurrentQ(0);
     } else {
+      const { overScore, peakScores, totalPeak } = calcResults(newAnswers);
+      logToSheet({
+        evento: "Completó",
+        nombre: clientName,
+        email: email,
+        overs: overScore,
+        p: peakScores.P, e: peakScores.E, a: peakScores.A, k: peakScores.K,
+        totalPeak: totalPeak,
+        nivel: getReadinessLevel(totalPeak).level,
+      });
       setPhase("results");
     }
   };
 
-  const calcResults = () => {
-    const overScore = ["o1","o2","o3"].reduce((a,id) => a + (answers[id]?.score || 0), 0);
+  const calcResults = (src = answers) => {
+    const overScore = ["o1","o2","o3"].reduce((a,id) => a + (src[id]?.score || 0), 0);
     const peakScores = { P: 0, E: 0, A: 0, K: 0 };
-    ["p1","p2","p3"].forEach(id => peakScores.P += answers[id]?.score || 0);
-    ["e1","e2","e3"].forEach(id => peakScores.E += answers[id]?.score || 0);
-    ["a1","a2","a3"].forEach(id => peakScores.A += answers[id]?.score || 0);
-    ["k1","k2","k3"].forEach(id => peakScores.K += answers[id]?.score || 0);
+    ["p1","p2","p3"].forEach(id => peakScores.P += src[id]?.score || 0);
+    ["e1","e2","e3"].forEach(id => peakScores.E += src[id]?.score || 0);
+    ["a1","a2","a3"].forEach(id => peakScores.A += src[id]?.score || 0);
+    ["k1","k2","k3"].forEach(id => peakScores.K += src[id]?.score || 0);
     const totalPeak = Object.values(peakScores).reduce((a,b) => a+b, 0);
     return { overScore, peakScores, totalPeak };
   };
@@ -284,7 +308,14 @@ function DiagnosticoVisible() {
             ))}
           </div>
           <button
-            onClick={() => { if (emailOk) { setPhase("diagnostic"); } else { setEmailTouched(true); } }}
+            onClick={() => {
+              if (emailOk) {
+                logToSheet({ evento: "Inició", nombre: clientName, email: email });
+                setPhase("diagnostic");
+              } else {
+                setEmailTouched(true);
+              }
+            }}
             disabled={!emailOk}
             style={{ background: emailOk ? COLORS.gold : "#2A2A2A", color: emailOk ? COLORS.black : "#666", border: "none", padding: "1rem 3rem", fontSize: "0.9rem", fontFamily: "monospace", letterSpacing: "0.1em", fontWeight: 700, cursor: emailOk ? "pointer" : "not-allowed", borderRadius: 4, width: "100%", textTransform: "uppercase", transition: "all 0.2s ease" }}
           >

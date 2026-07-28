@@ -179,12 +179,15 @@ function DiagnosticoVisible() {
   const [currentQ, setCurrentQ] = useState(0);
   const [answers, setAnswers] = useState({});
   const [clientName, setClientName] = useState("");
+  const [nameTouched, setNameTouched] = useState(false);
   const [email, setEmail] = useState("");
   const [emailTouched, setEmailTouched] = useState(false);
   const [selected, setSelected] = useState(null);
 
   const isValidEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
   const emailOk = isValidEmail(email);
+  const nameOk = clientName.trim().length > 0;
+  const canStart = nameOk && emailOk;
 
   // Google Sheet endpoint (Apps Script Web App). Fire-and-forget logging.
   const SHEET_ENDPOINT = "https://script.google.com/macros/s/AKfycbxHvDaqUPspRZxX5gM603WfJLGneVxEFRl-9n249lH9RM06aqmf4JrjQ4MkQdnuIVyC6Q/exec";
@@ -251,6 +254,7 @@ function DiagnosticoVisible() {
     setAnswers({});
     setSelected(null);
     setClientName("");
+    setNameTouched(false);
     setEmail("");
     setEmailTouched(false);
   };
@@ -271,14 +275,23 @@ function DiagnosticoVisible() {
           <p style={{ color: "#AAA", fontSize: "1rem", lineHeight: 1.7, marginBottom: "2.5rem", fontStyle: "italic" }}>
             Este protocolo evalúa los 3 Overs y los 4 pilares del Marco PEAK para identificar exactamente dónde está el gap entre tu nivel actual y el nivel VP.
           </p>
-          <div style={{ background: "#1A1A1A", border: "1px solid #333", borderRadius: 12, padding: "1.5rem", marginBottom: "1rem", textAlign: "left" }}>
-            <p style={{ color: "#888", fontSize: "0.75rem", letterSpacing: "0.1em", fontFamily: "monospace", marginBottom: "0.75rem" }}>TU NOMBRE (OPCIONAL)</p>
+          <div style={{ background: "#1A1A1A", border: `1px solid ${nameTouched && !nameOk ? "#C0392B" : "#333"}`, borderRadius: 12, padding: "1.5rem", marginBottom: "1rem", textAlign: "left" }}>
+            <p style={{ color: "#888", fontSize: "0.75rem", letterSpacing: "0.1em", fontFamily: "monospace", marginBottom: "0.75rem" }}>
+              TU NOMBRE <span style={{ color: COLORS.gold }}>(OBLIGATORIO)</span>
+            </p>
             <input
               value={clientName}
               onChange={e => setClientName(e.target.value)}
+              onBlur={() => setNameTouched(true)}
               placeholder="Ej: Ana García"
-              style={{ width: "100%", background: "transparent", border: "none", borderBottom: `1px solid ${COLORS.gold}`, color: COLORS.white, fontSize: "1.1rem", padding: "0.5rem 0", outline: "none", fontFamily: "Georgia, serif", boxSizing: "border-box" }}
+              aria-label="Tu nombre (obligatorio)"
+              style={{ width: "100%", background: "transparent", border: "none", borderBottom: `1px solid ${nameTouched && !nameOk ? "#C0392B" : COLORS.gold}`, color: COLORS.white, fontSize: "1.1rem", padding: "0.5rem 0", outline: "none", fontFamily: "Georgia, serif", boxSizing: "border-box" }}
             />
+            {nameTouched && !nameOk && (
+              <p style={{ color: "#C0392B", fontSize: "0.75rem", fontFamily: "monospace", margin: "0.6rem 0 0" }}>
+                Ingresa tu nombre para continuar.
+              </p>
+            )}
           </div>
           <div style={{ background: "#1A1A1A", border: `1px solid ${emailTouched && !emailOk ? "#C0392B" : "#333"}`, borderRadius: 12, padding: "1.5rem", marginBottom: "2rem", textAlign: "left" }}>
             <p style={{ color: "#888", fontSize: "0.75rem", letterSpacing: "0.1em", fontFamily: "monospace", marginBottom: "0.75rem" }}>
@@ -309,15 +322,16 @@ function DiagnosticoVisible() {
           </div>
           <button
             onClick={() => {
-              if (emailOk) {
+              if (canStart) {
                 logToSheet({ evento: "Inició", nombre: clientName, email: email });
                 setPhase("diagnostic");
               } else {
+                setNameTouched(true);
                 setEmailTouched(true);
               }
             }}
-            disabled={!emailOk}
-            style={{ background: emailOk ? COLORS.gold : "#2A2A2A", color: emailOk ? COLORS.black : "#666", border: "none", padding: "1rem 3rem", fontSize: "0.9rem", fontFamily: "monospace", letterSpacing: "0.1em", fontWeight: 700, cursor: emailOk ? "pointer" : "not-allowed", borderRadius: 4, width: "100%", textTransform: "uppercase", transition: "all 0.2s ease" }}
+            disabled={!canStart}
+            style={{ background: canStart ? COLORS.gold : "#2A2A2A", color: canStart ? COLORS.black : "#666", border: "none", padding: "1rem 3rem", fontSize: "0.9rem", fontFamily: "monospace", letterSpacing: "0.1em", fontWeight: 700, cursor: canStart ? "pointer" : "not-allowed", borderRadius: 4, width: "100%", textTransform: "uppercase", transition: "all 0.2s ease" }}
           >
             Iniciar Diagnóstico →
           </button>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Visible · Código QR del Diagnóstico</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh; background: #0D0D0D; color: #FAFAF8;
+      font-family: 'Georgia', serif; display: flex; align-items: center;
+      justify-content: center; padding: 2rem;
+    }
+    .card {
+      max-width: 460px; width: 100%; text-align: center;
+      background: #111; border: 1px solid #222; border-radius: 16px; padding: 2.5rem 2rem;
+    }
+    .tag {
+      display: inline-block; background: #F5C400; color: #0D0D0D; font-size: 11px;
+      font-family: monospace; letter-spacing: 0.15em; padding: 6px 16px;
+      margin-bottom: 1.75rem; font-weight: 700;
+    }
+    h1 { font-size: 2.75rem; font-weight: 400; letter-spacing: -0.02em; margin-bottom: 0.35rem; }
+    .sub { color: #F5C400; font-size: 0.8rem; letter-spacing: 0.2em; font-family: monospace; text-transform: uppercase; margin-bottom: 2rem; }
+    .qr-wrap { background: #FFFFFF; border-radius: 12px; padding: 1.25rem; display: inline-block; margin-bottom: 1.75rem; }
+    .qr-wrap img { display: block; width: 240px; height: 240px; }
+    .hint { color: #AAA; font-size: 0.95rem; font-style: italic; line-height: 1.6; margin-bottom: 1.5rem; }
+    a.link {
+      display: inline-block; color: #0D0D0D; background: #F5C400; text-decoration: none;
+      font-family: monospace; font-size: 0.8rem; letter-spacing: 0.05em; padding: 0.75rem 1.5rem;
+      border-radius: 4px; font-weight: 700; word-break: break-all;
+    }
+    .foot { color: #444; font-family: monospace; font-size: 0.7rem; margin-top: 2rem; letter-spacing: 0.08em; }
+    @media print {
+      body { background: #fff; color: #000; }
+      .card { border: none; background: #fff; }
+      a.link { background: #eee; }
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="tag">DIAGNÓSTICO VISIBLE</div>
+    <h1>Visible</h1>
+    <p class="sub">Marco PEAK · VP Readiness</p>
+    <div class="qr-wrap">
+      <img src="qr-code.svg" alt="Código QR hacia el diagnóstico Visible" />
+    </div>
+    <p class="hint">Escanea el código con la cámara de tu teléfono para abrir el diagnóstico.</p>
+    <a class="link" href="https://madelinma1.github.io/LANDINGPAGEQRCODE/">madelinma1.github.io/LANDINGPAGEQRCODE</a>
+    <p class="foot">© MADELIN SANTANA 2026</p>
+  </div>
+</body>
+</html>

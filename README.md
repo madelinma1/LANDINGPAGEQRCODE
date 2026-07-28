@@ -22,16 +22,33 @@ El QR apunta al sitio en vivo. Si cambia el nombre del repositorio o el usuario,
 3. Selecciona la rama por defecto (`main`) y la carpeta **`/ (root)`**, luego **Save**.
 4. Espera 1–2 minutos: el sitio queda disponible en la URL de arriba.
 
-No hay paso de compilación: el sitio es un único `index.html` (React vía CDN) que GitHub Pages sirve tal cual.
+GitHub Pages sirve los archivos estáticos tal cual. El sitio carga un bundle
+ya compilado (`app.js`) — no hay paso de build en el servidor.
 
 ## 📁 Archivos
 
 | Archivo | Descripción |
 | --- | --- |
-| `index.html` | La app del diagnóstico (página principal) |
+| `index.html` | Página principal; carga el bundle `app.js` |
+| `app.js` | Bundle compilado (React + la app) que renderiza el diagnóstico |
+| `src/app.jsx` | **Código fuente** del diagnóstico (editar aquí) |
 | `qr.html` | Página imprimible con el código QR |
 | `qr-code.svg` / `qr-code.png` | Imágenes del código QR |
+| `qr-code-print.png` | Versión de alta resolución para impresión |
 | `.nojekyll` | Evita el procesamiento Jekyll de GitHub Pages |
+
+## 🛠️ Editar el diagnóstico y recompilar
+
+El código fuente vive en `src/app.jsx`. Tras editarlo, recompila el bundle
+`app.js` con [esbuild](https://esbuild.github.io/):
+
+```bash
+npm install --no-save esbuild react react-dom
+npx esbuild src/app.jsx --bundle --minify --format=iife --jsx=automatic \
+  --define:process.env.NODE_ENV='"production"' --outfile=app.js
+```
+
+Luego haz commit de `src/app.jsx` **y** `app.js`.
 
 ## 🔄 Regenerar el código QR
 

@@ -341,152 +341,30 @@ function DiagnosticoVisible() {
   }
 
   if (phase === "results") {
-    const { overScore, peakScores, totalPeak } = calcResults();
-    const oversProfile = getOversProfile(overScore);
-    const peakProfile = getPeakProfile(peakScores);
-    const readiness = getReadinessLevel(totalPeak);
-    const peakMax = 12;
-    const peakLabels = { P: "Propósito", E: "Energía", A: "Autenticidad", K: "Key Results" };
-    const peakColors = { P: "#2D6A4F", E: "#9B2335", A: "#4A3728", K: "#1B4F8A" };
-
-    const priorityShifts = () => {
-      const low = Object.entries(peakScores).sort((a,b) => b[1]-a[1]).slice(0,2).map(([k]) => k);
-      const shiftMap = {
-        P: "Shift 1 & 2 — Claridad estratégica e influencia: necesitas definir tu Llamado Visible y pasar de acumular habilidades a construir influencia.",
-        E: "Shift 3 — Disponibilidad ilimitada → acción estratégica: rediseñar tu agenda, delegar y proteger energía para lo que posiciona VP.",
-        A: "Shift 4 — Reconfiguración de identidad: trabajar la autoexigencia silenciosa y autorizarte a ocupar el espacio que ya te ganaste.",
-        K: "Shift 5 & narrativa — Acompañamiento estratégico: activar sponsors, construir portafolio de impacto y narrativa de 90 segundos."
-      };
-      return low.map(k => shiftMap[k]);
-    };
-
     return (
-      <div style={{ minHeight: "100vh", background: COLORS.black, fontFamily: "'Georgia', serif", padding: "2rem", color: COLORS.white }}>
-        <div style={{ maxWidth: 680, margin: "0 auto" }}>
-          {/* Header */}
-          <div style={{ textAlign: "center", marginBottom: "3rem" }}>
-            <div style={{ display: "inline-block", background: COLORS.gold, color: COLORS.black, fontSize: 11, fontFamily: "monospace", letterSpacing: "0.15em", padding: "6px 16px", marginBottom: "1.5rem", fontWeight: 700 }}>
-              RESULTADOS DEL DIAGNÓSTICO
-            </div>
-            <h1 style={{ fontSize: "clamp(1.8rem, 5vw, 2.5rem)", fontWeight: 400, color: COLORS.white, margin: "0 0 0.5rem" }}>
-              {clientName ? clientName : "Tú"}
-            </h1>
-            {email && (
-              <p style={{ color: COLORS.gold, fontFamily: "monospace", fontSize: "0.8rem", letterSpacing: "0.05em", margin: "0 0 0.35rem" }}>{email}</p>
-            )}
-            <p style={{ color: "#888", fontFamily: "monospace", fontSize: "0.8rem", letterSpacing: "0.1em" }}>Marco PEAK · VP Readiness · Madelin Santana</p>
+      <div style={{ minHeight: "100vh", background: COLORS.black, fontFamily: "'Georgia', serif", display: "flex", alignItems: "center", justifyContent: "center", padding: "2rem", color: COLORS.white }}>
+        <div style={{ maxWidth: 520, width: "100%", textAlign: "center" }}>
+          <div style={{ display: "inline-block", background: COLORS.gold, color: COLORS.black, fontSize: 11, fontFamily: "monospace", letterSpacing: "0.15em", padding: "6px 16px", marginBottom: "2rem", fontWeight: 700 }}>
+            PROTOCOLO COMPLETADO
           </div>
-
-          {/* VP Readiness Score */}
-          <div style={{ background: "#111", border: `1px solid ${readiness.color}33`, borderRadius: 12, padding: "2rem", marginBottom: "1.5rem", textAlign: "center" }}>
-            <p style={{ color: "#888", fontFamily: "monospace", fontSize: "0.75rem", letterSpacing: "0.12em", marginBottom: "1rem" }}>NIVEL DE PREPARACIÓN VP</p>
-            <div style={{ fontSize: "clamp(1.4rem, 4vw, 2rem)", fontWeight: 400, color: readiness.color, marginBottom: "1rem" }}>{readiness.level}</div>
-            <div style={{ background: "#1A1A1A", borderRadius: 100, height: 8, width: "100%", marginBottom: "1rem", overflow: "hidden" }}>
-              <div style={{ height: "100%", width: `${readiness.pct}%`, background: readiness.color, borderRadius: 100, transition: "width 1s ease" }} />
-            </div>
-            <p style={{ color: "#AAA", fontSize: "0.9rem", fontStyle: "italic", lineHeight: 1.6 }}>{readiness.desc}</p>
+          <div style={{ width: 72, height: 72, borderRadius: "50%", border: `2px solid ${COLORS.gold}`, display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 2rem", color: COLORS.gold, fontSize: "2rem" }}>
+            ✓
           </div>
-
-          {/* 3 Overs */}
-          <div style={{ background: "#111", border: "1px solid #222", borderRadius: 12, padding: "1.5rem", marginBottom: "1.5rem" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
-              <p style={{ color: "#888", fontFamily: "monospace", fontSize: "0.75rem", letterSpacing: "0.12em", margin: 0 }}>LOS 3 OVERS</p>
-              <span style={{ background: `${oversProfile.color}22`, color: oversProfile.color, fontFamily: "monospace", fontSize: "0.75rem", padding: "3px 10px", borderRadius: 100 }}>{oversProfile.label}</span>
-            </div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "0.75rem", marginBottom: "1rem" }}>
-              {[["o1","OW\nORKED"],["o2","OC\nOMMIT"],["o3","OW\nHELM"]].map(([id, lbl]) => {
-                const sc = answers[id]?.score || 1;
-                const pct = ((sc-1)/3)*100;
-                return (
-                  <div key={id} style={{ background: "#0D0D0D", border: "1px solid #2A2A2A", borderRadius: 8, padding: "0.75rem", textAlign: "center" }}>
-                    <div style={{ color: "#666", fontFamily: "monospace", fontSize: "0.65rem", letterSpacing: "0.08em", marginBottom: "0.5rem", whiteSpace: "pre-line" }}>OVER{lbl}</div>
-                    <div style={{ background: "#1A1A1A", borderRadius: 100, height: 6, overflow: "hidden" }}>
-                      <div style={{ height: "100%", width: `${pct}%`, background: pct > 65 ? "#C0392B" : pct > 30 ? COLORS.gold : "#27AE60", borderRadius: 100 }} />
-                    </div>
-                    <div style={{ color: pct > 65 ? "#C0392B" : pct > 30 ? COLORS.gold : "#27AE60", fontFamily: "monospace", fontSize: "0.75rem", marginTop: 6 }}>
-                      {pct > 65 ? "Crítico" : pct > 30 ? "Presente" : "Gestionado"}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-            <p style={{ color: "#AAA", fontSize: "0.85rem", fontStyle: "italic", margin: 0, lineHeight: 1.6 }}>{oversProfile.desc}</p>
-          </div>
-
-          {/* PEAK Radar */}
-          <div style={{ background: "#111", border: "1px solid #222", borderRadius: 12, padding: "1.5rem", marginBottom: "1.5rem" }}>
-            <p style={{ color: "#888", fontFamily: "monospace", fontSize: "0.75rem", letterSpacing: "0.12em", marginBottom: "1.25rem" }}>MARCO PEAK — PERFIL DE BRECHA</p>
-            <div style={{ display: "grid", gap: "0.85rem" }}>
-              {Object.entries(peakScores).map(([key, score]) => {
-                const pct = Math.round(((peakMax - score) / (peakMax - 3)) * 100);
-                return (
-                  <div key={key}>
-                    <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.3rem" }}>
-                      <span style={{ color: peakColors[key], fontFamily: "monospace", fontSize: "0.8rem", fontWeight: 700 }}>{key} — {peakLabels[key]}</span>
-                      <span style={{ color: pct > 60 ? "#C0392B" : pct > 30 ? COLORS.gold : "#27AE60", fontFamily: "monospace", fontSize: "0.75rem" }}>
-                        {pct > 60 ? "Brecha alta" : pct > 30 ? "En desarrollo" : "Sólido"}
-                      </span>
-                    </div>
-                    <div style={{ background: "#1A1A1A", borderRadius: 100, height: 10, overflow: "hidden" }}>
-                      <div style={{ height: "100%", width: `${pct}%`, background: pct > 60 ? "#C0392B" : pct > 30 ? COLORS.gold : "#27AE60", borderRadius: 100 }} />
-                    </div>
-                    <div style={{ color: "#555", fontSize: "0.7rem", fontFamily: "monospace", marginTop: 3 }}>
-                      {pct > 60 ? "Área de trabajo prioritaria" : pct > 30 ? "Área de fortalecimiento" : "Capitalizar como fortaleza"}
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Priority Shifts */}
-          <div style={{ background: "#0D0D0D", border: `1px solid ${COLORS.gold}44`, borderRadius: 12, padding: "1.5rem", marginBottom: "1.5rem" }}>
-            <p style={{ color: COLORS.gold, fontFamily: "monospace", fontSize: "0.75rem", letterSpacing: "0.12em", marginBottom: "1.25rem" }}>TUS SHIFTS PRIORITARIOS</p>
-            <div style={{ display: "grid", gap: "0.85rem" }}>
-              {priorityShifts().map((shift, i) => (
-                <div key={i} style={{ display: "flex", gap: "0.75rem", alignItems: "flex-start" }}>
-                  <div style={{ width: 24, height: 24, background: COLORS.gold, color: COLORS.black, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "monospace", fontSize: "0.75rem", fontWeight: 700, flexShrink: 0, marginTop: 2 }}>{i + 1}</div>
-                  <p style={{ color: "#CCC", fontSize: "0.9rem", lineHeight: 1.6, margin: 0 }}>{shift}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Session Plan */}
-          <div style={{ background: "#111", border: "1px solid #222", borderRadius: 12, padding: "1.5rem", marginBottom: "2rem" }}>
-            <p style={{ color: "#888", fontFamily: "monospace", fontSize: "0.75rem", letterSpacing: "0.12em", marginBottom: "1.25rem" }}>PLAN DE TRABAJO SUGERIDO — 16 SESIONES</p>
-            {[
-              ["Sesiones 1–4", "PILAR P", "Activar Llamado Visible + claridad de propósito", "#2D6A4F"],
-              ["Sesiones 5–8", "PILAR E", "Rediseño energético + núcleo motivador + delegación", "#9B2335"],
-              ["Sesiones 9–12", "PILAR A", "Autenticidad en acción: coherencia, presencia y límites", "#4A3728"],
-              ["Sesiones 13–16", "PILAR K", "Portafolio de impacto + narrativa estratégica + sponsors", "#1B4F8A"],
-            ].map(([ses, pilar, desc, col]) => (
-              <div key={ses} style={{ display: "flex", gap: "1rem", alignItems: "flex-start", paddingBottom: "0.85rem", marginBottom: "0.85rem", borderBottom: "1px solid #1E1E1E" }}>
-                <div style={{ width: 70, flexShrink: 0 }}>
-                  <div style={{ color: "#666", fontFamily: "monospace", fontSize: "0.65rem" }}>{ses}</div>
-                  <div style={{ color: col, fontFamily: "monospace", fontSize: "0.75rem", fontWeight: 700 }}>{pilar}</div>
-                </div>
-                <p style={{ color: "#AAA", fontSize: "0.85rem", lineHeight: 1.5, margin: 0 }}>{desc}</p>
-              </div>
-            ))}
-          </div>
-
-          {/* Actions */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem" }}>
-            <button
-              onClick={restartDiagnostic}
-              style={{ background: "transparent", border: `1px solid ${COLORS.gold}`, color: COLORS.gold, padding: "0.85rem", fontFamily: "monospace", fontSize: "0.8rem", letterSpacing: "0.08em", cursor: "pointer", borderRadius: 4 }}
-            >
-              ← Nuevo diagnóstico
-            </button>
-            <button
-              onClick={() => window.print?.()}
-              style={{ background: COLORS.gold, border: "none", color: COLORS.black, padding: "0.85rem", fontFamily: "monospace", fontSize: "0.8rem", letterSpacing: "0.08em", cursor: "pointer", fontWeight: 700, borderRadius: 4 }}
-            >
-              Guardar resultados ↗
-            </button>
-          </div>
-          <p style={{ textAlign: "center", color: "#444", fontFamily: "monospace", fontSize: "0.7rem", marginTop: "2rem", letterSpacing: "0.08em" }}>
+          <h1 style={{ color: COLORS.white, fontSize: "clamp(1.8rem, 6vw, 2.75rem)", fontWeight: 400, lineHeight: 1.1, margin: "0 0 1rem", letterSpacing: "-0.02em" }}>
+            Diagnóstico completado
+          </h1>
+          <p style={{ color: "#AAA", fontSize: "1.05rem", lineHeight: 1.7, fontStyle: "italic", marginBottom: "2.5rem" }}>
+            {clientName ? `Gracias, ${clientName}. ` : "Gracias. "}
+            Tus respuestas han sido registradas. Madelin Santana revisará tu
+            diagnóstico y se pondrá en contacto contigo.
+          </p>
+          <button
+            onClick={restartDiagnostic}
+            style={{ background: "transparent", border: `1px solid ${COLORS.gold}`, color: COLORS.gold, padding: "0.85rem 2rem", fontFamily: "monospace", fontSize: "0.8rem", letterSpacing: "0.08em", cursor: "pointer", borderRadius: 4 }}
+          >
+            Iniciar nuevo diagnóstico
+          </button>
+          <p style={{ textAlign: "center", color: "#444", fontFamily: "monospace", fontSize: "0.7rem", marginTop: "2.5rem", letterSpacing: "0.08em" }}>
             VISIBLE · MARCO PEAK · © MADELIN SANTANA 2026
           </p>
         </div>

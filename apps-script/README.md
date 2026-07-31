@@ -1,65 +1,75 @@
-# Diagnostic Completion Agent
+# Visible — Unified Backend (capture + cohort follow-up)
 
-A two-part system that captures completed diagnostics and follows up by
-emailing people **in cohorts grouped by their result category**.
+The live diagnostic on this site already logs every `Inició` / `Completó`
+event to a Google Sheet. This backend **merges** that capture with an
+automatic follow-up that groups the people who **completed** into cohorts by
+their result (`Nivel VP`) and emails each cohort.
 
-- **`Code.gs`** — Google Apps Script backend. Contains both the ingest
-  endpoint (`doPost`) and the batch processor (`processDiagnosticCohorts`).
-- **`frontend-capture.js`** — vanilla JS snippet for the landing page that
-  transmits each completion to the endpoint.
+- **`Code.gs`** — the unified Google Apps Script: the `doPost` ingest endpoint
+  the site already posts to **plus** the `processDiagnosticCohorts` batch job.
+- **`frontend-capture.js`** — *optional*. The current site captures via its
+  React app, so you don't need this. It's only for embedding the diagnostic on
+  a non-React page (a web builder, a plain HTML page, etc.).
 
-> This folder is a **standalone reference implementation** built to the spec.
-> It is independent of the live diagnostic on this site (which already logs to
-> a Sheet). Wire it up on its own Sheet/Doc, or adapt it as needed.
+## How the two halves connect
 
-## Google Sheet layout
+| Site sends (per event) | Sheet column | Used by the batch job for |
+| --- | --- | --- |
+| `evento` (`Inició`/`Completó`) | B `Evento` | "completed?" filter (`Completó`) |
+| `nombre` | C `Nombre` | cohort member list |
+| `email` | D `Email` | recipient |
+| `nivel` (VP level) | K `Nivel VP` | **the category cohorts are grouped by** |
+
+Two columns are added and managed by the batch job:
 
 | Col | Header | Meaning |
 | --- | --- | --- |
-| A | Email Address | recipient email |
-| B | First Name | recipient first name |
-| C | Timestamp | when the diagnostic was completed |
-| D | Diagnostic Completed? | `Yes` / `No` |
-| E | Diagnostic Result Category | e.g. `Category A` |
-| F | Cohort Processed? | `Yes` once grouped + emailed |
-| G | Cohort Doc URL | link to the cohort tracking doc (written by the batch job) |
+| L | Cohort Procesado | `Yes` once grouped + emailed |
+| M | Cohort Doc URL | link to the cohort tracking doc |
 
-## Master template Doc format
+## Master template Doc
 
-Create one Google Doc, put its ID in `TEMPLATE_DOC_ID`. One section per
-category, delimited by a dashed header. First non-blank line under a header is
-the **Subject**; everything below is the **Body**.
+One Google Doc, its ID in `TEMPLATE_DOC_ID`. One section per `Nivel VP` value,
+delimited by a dashed header. First non-blank line = **Subject**, the rest =
+**Body**:
 
 ```
---- CATEGORY A ---
-Tu resultado: Categoría A
-Hola, gracias por completar el diagnóstico...
+--- Lista para VP ---
+Tu resultado: Lista para VP
+Hola, felicidades...
 
---- CATEGORY B ---
-Tu resultado: Categoría B
-Hola, aquí está tu siguiente paso...
+--- En construcción estratégica ---
+Tu resultado: En construcción estratégica
+Hola, tu siguiente paso...
+
+--- Zona de reenfoque ---
+...
+
+--- Inicio del recorrido ---
+...
 ```
 
-The header label must match Column E (case/spacing-insensitive).
+Accents / case / spacing are ignored when matching a header to a `Nivel VP`
+value.
 
-## Setup
+## Setup (keeps the site's existing endpoint URL)
 
-1. Open your Google Sheet → **Extensions → Apps Script**. Paste `Code.gs`.
-2. Set `TEMPLATE_DOC_ID` (and `DATA_SHEET_NAME` if your tab isn't `Datos`).
-3. **Deploy → New deployment → Web app** (Execute as **Me**, Access
-   **Anyone**). Copy the `/exec` URL.
-4. Put that URL in `frontend-capture.js` (`ENDPOINT_URL`) and add the snippet
-   to your page; edit the selectors to match your form.
+1. Open the Sheet the site writes to → **Extensions → Apps Script**.
+2. Paste `Code.gs` **into that same project** (it already contains the site's
+   `doPost`; this version keeps it and adds the cohort logic). Save.
+3. Set `TEMPLATE_DOC_ID` and create the master template Doc (format above).
+4. **Deploy → Manage deployments →** edit the existing Web app deployment →
+   **Deploy**. This publishes the new code on the **same `/exec` URL**, so the
+   live site keeps posting with no change.
 5. Run `processDiagnosticCohorts` once from the editor (authorize when asked),
-   or run `createDailyTrigger` to schedule it automatically.
+   or run `createDailyTrigger` to schedule it daily.
 
 ## How the batch job works
 
-1. Reads every row and parses the template Doc into `{category: {subject, body}}`.
-2. Selects rows where **Completed = Yes** and **Processed ≠ Yes**.
-3. Groups those rows by their exact result category (Column E).
-4. For each group: creates a `Diagnostic Cohort - <Category> - <date>` Doc
-   listing the members, then sends **one** email with the whole group in
-   **BCC** (recipients stay private to each other).
-5. Stamps **Processed = Yes** and the **Cohort Doc URL** on every row in the
-   batch, so nobody is ever emailed twice.
+1. Reads all rows and parses the template Doc into `{ level: {subject, body} }`.
+2. Selects rows where **Evento = Completó** and **Cohort Procesado ≠ Yes**.
+3. Groups them by **Nivel VP** (Column K).
+4. Per group: creates a `Diagnostic Cohort - <level> - <date>` Doc listing the
+   members, then sends **one** email with the whole group in **BCC**.
+5. Stamps **Cohort Procesado = Yes** + the **Cohort Doc URL** on each row, so
+   nobody is ever emailed twice.

@@ -1,6 +1,11 @@
 /*************************************************************************
  * DIAGNOSTIC COMPLETION AGENT — FRONTEND CAPTURE (vanilla JavaScript)
  * ------------------------------------------------------------------------
+ * OPTIONAL. The current Visible site already captures completions from its
+ * React app, so you do NOT need this for that site. Use this snippet only to
+ * embed the diagnostic on a DIFFERENT page (a web builder, a plain static
+ * HTML page, etc.) and feed the same unified backend (Code.gs).
+ *
  * Drop this snippet into any static page / web builder that hosts the
  * diagnostic (e.g. a GitHub Pages site at https://<user>.github.io/...).
  *

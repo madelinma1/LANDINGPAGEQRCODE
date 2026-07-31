@@ -31,7 +31,7 @@
 // The single master Google Doc holding one preset email per result category.
 // (See "TEMPLATE DOC FORMAT" at the bottom — headers must match the Nivel VP
 // values the site produces.)
-var TEMPLATE_DOC_ID = 'YOUR_SINGLE_TEMPLATE_DOC_ID_HERE';
+var TEMPLATE_DOC_ID = '10PqKDbCQ_fq4y6vtu4rBy7TwJDYmao5E7_rL61qf-B8';
 
 // The tab the live site writes to.
 var DATA_SHEET_NAME = 'Datos';

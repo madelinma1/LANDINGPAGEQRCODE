@@ -28,10 +28,17 @@
  * GLOBAL CONFIGURATION
  * ===================================================================== */
 
-// The single master Google Doc holding one preset email per result category.
-// (See "TEMPLATE DOC FORMAT" at the bottom — headers must match the Nivel VP
-// values the site produces.)
-var TEMPLATE_DOC_ID = '10PqKDbCQ_fq4y6vtu4rBy7TwJDYmao5E7_rL61qf-B8';
+// ONE Google Doc per Nivel VP. In each Doc: the FIRST non-blank line is the
+// email Subject; everything below it is the email Body, sent verbatim.
+// Edit these Docs freely — whatever you type is exactly what gets emailed.
+// The keys must match the "Nivel VP" values the site produces (accents/case
+// are ignored when matching).
+var TEMPLATE_DOC_IDS = {
+  'Lista para VP':               '1oMZMGRGc2OpEew95QmBDEVntDrcYVRiT-c436SVDZAY',
+  'En construcción estratégica': '1zA1F2eJmdoooCqxucalwZx2lAnIMHYcXMoGqtneK7tA',
+  'Zona de reenfoque':           '1iaXJNZGcsid3ZnH8pWUtUZnF0AVi__HLYtI5iHPYPqs',
+  'Inicio del recorrido':        '1NrV9xScGMXbCxd_aqPaZJdKP7RLlZLEOsAmAJkHqztc'
+};
 
 // The tab the live site writes to.
 var DATA_SHEET_NAME = 'Datos';
@@ -134,7 +141,7 @@ function processDiagnosticCohorts() {
   // ---- STEP 1: read all rows in one batch + parse the template Doc. ----
   var numRows = lastRow - HEADER_ROWS;
   var values  = sheet.getRange(HEADER_ROWS + 1, 1, numRows, COL_COHORT_URL).getValues();
-  var templates = parseTemplateDoc(TEMPLATE_DOC_ID);
+  var templates = loadTemplates();
 
   // ---- STEP 2 + 3: select COMPLETED + not-yet-processed rows; GROUP them
   //      by the result category (Nivel VP). ----
@@ -219,45 +226,33 @@ function processDiagnosticCohorts() {
 
 
 /* =======================================================================
- * TEMPLATE PARSER — splits the master Doc into { category: {subject, body} }.
- * Sections delimited by dashed headers, e.g.  --- Lista para VP ---
- * First non-blank line under a header = Subject; the rest = Body.
+ * TEMPLATE LOADER — reads ONE Google Doc per Nivel VP.
+ * Returns { normalizedLevel: {subject, body} }. In each Doc the first
+ * non-blank line is the Subject; everything after it is the Body (verbatim).
  * ===================================================================== */
-function parseTemplateDoc(docId) {
-  if (!docId || docId === 'YOUR_SINGLE_TEMPLATE_DOC_ID_HERE') {
-    throw new Error('TEMPLATE_DOC_ID is not set. Paste your master template Doc ID at the top.');
-  }
-
-  var lines = DocumentApp.openById(docId).getBody().getText().split('\n');
-  var headerRegex = /^\s*-{2,}\s*(.+?)\s*-{2,}\s*$/;
-
-  var templates = {}, currentKey = null, subject = '', bodyLines = [], subjectCaptured = false;
-
-  function flush() {
-    if (currentKey !== null) {
-      templates[currentKey] = { subject: subject.trim(), body: bodyLines.join('\n').trim() };
-    }
-  }
-
-  for (var i = 0; i < lines.length; i++) {
-    var line = lines[i], m = line.match(headerRegex);
-    if (m) {
-      flush();
-      currentKey = normalizeKey(m[1]);
-      subject = ''; bodyLines = []; subjectCaptured = false;
+function loadTemplates() {
+  var templates = {};
+  for (var level in TEMPLATE_DOC_IDS) {
+    var docId = TEMPLATE_DOC_IDS[level];
+    if (!docId || docId.indexOf('YOUR_') === 0) {
+      Logger.log('Template Doc ID not set for "' + level + '" — skipping.');
       continue;
     }
-    if (currentKey === null) continue;
-    if (!subjectCaptured) {
-      if (line.trim() === '') continue;
-      subject = line.trim();
-      subjectCaptured = true;
-    } else {
-      bodyLines.push(line);
-    }
+    var text = DocumentApp.openById(docId).getBody().getText();
+    templates[normalizeKey(level)] = parseSubjectBody(text);
   }
-  flush();
   return templates;
+}
+
+// First non-blank line = Subject; everything after it = Body (sent verbatim).
+function parseSubjectBody(text) {
+  var lines = text.split('\n');
+  var subject = '', bodyStart = 0;
+  for (var i = 0; i < lines.length; i++) {
+    if (lines[i].trim() !== '') { subject = lines[i].trim(); bodyStart = i + 1; break; }
+  }
+  var body = lines.slice(bodyStart).join('\n').trim();
+  return { subject: subject, body: body };
 }
 
 
@@ -310,26 +305,25 @@ function createDailyTrigger() {
 
 /* =======================================================================
  * TEMPLATE DOC FORMAT
- * The site produces exactly four Nivel VP values. Create one section per
- * value in the Doc referenced by TEMPLATE_DOC_ID:
+ * There is ONE Google Doc per Nivel VP (see TEMPLATE_DOC_IDS at the top).
+ * Each Doc holds only that level's email. Inside every Doc:
  *
- *   --- Lista para VP ---
- *   Tu resultado: Lista para VP
- *   (email body...)
+ *   Línea 1  ->  el ASUNTO del correo
+ *   (línea en blanco)
+ *   El resto ->  el CUERPO del correo (se envía tal cual)
  *
- *   --- En construcción estratégica ---
- *   Tu resultado: En construcción estratégica
- *   (email body...)
+ * Example (contents of the "Lista para VP" Doc):
  *
- *   --- Zona de reenfoque ---
- *   ...
+ *   Estás lista para VP — activemos tu siguiente movimiento
  *
- *   --- Inicio del recorrido ---
- *   ...
+ *   Hola,
+ *   Gracias por completar el diagnóstico Visible...
  *
  * Rules:
- *   • Header label between the dashes must match the "Nivel VP" value
+ *   • The Doc's key in TEMPLATE_DOC_IDS must match the "Nivel VP" value
  *     (accents/case/spacing are ignored when matching).
- *   • First non-blank line under a header = Subject.
- *   • Everything below (until the next header) = Body.
+ *   • The FIRST non-blank line is the Subject.
+ *   • Everything after it is the Body, emailed verbatim.
+ *   • Do NOT put any preamble/instructions at the very top — line 1 is the
+ *     subject.
  * ===================================================================== */

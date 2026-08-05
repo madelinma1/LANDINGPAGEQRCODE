@@ -27,37 +27,32 @@ Two columns are added and managed by the batch job:
 | L | Cohort Procesado | `Yes` once grouped + emailed |
 | M | Cohort Doc URL | link to the cohort tracking doc |
 
-## Master template Doc
+## Email template Docs (one per Nivel VP)
 
-One Google Doc, its ID in `TEMPLATE_DOC_ID`. One section per `Nivel VP` value,
-delimited by a dashed header. First non-blank line = **Subject**, the rest =
-**Body**:
+There is **one Google Doc per `Nivel VP` level**, mapped in `TEMPLATE_DOC_IDS`
+at the top of `Code.gs`. Each Doc holds that level's email:
+
+- **Line 1** = the email **Subject**
+- **Everything below** = the email **Body**, sent verbatim
 
 ```
---- Lista para VP ---
-Tu resultado: Lista para VP
-Hola, felicidades...
+Estás lista para VP — activemos tu siguiente movimiento
 
---- En construcción estratégica ---
-Tu resultado: En construcción estratégica
-Hola, tu siguiente paso...
-
---- Zona de reenfoque ---
-...
-
---- Inicio del recorrido ---
-...
+Hola,
+Gracias por completar el diagnóstico Visible...
 ```
 
-Accents / case / spacing are ignored when matching a header to a `Nivel VP`
-value.
+Edit these Docs anytime — whatever you type is exactly what gets emailed. Don't
+add a preamble at the very top (line 1 is the subject). The map keys must match
+the `Nivel VP` values (accents / case / spacing are ignored when matching).
 
 ## Setup (keeps the site's existing endpoint URL)
 
 1. Open the Sheet the site writes to → **Extensions → Apps Script**.
 2. Paste `Code.gs` **into that same project** (it already contains the site's
    `doPost`; this version keeps it and adds the cohort logic). Save.
-3. Set `TEMPLATE_DOC_ID` and create the master template Doc (format above).
+3. Confirm the four Doc IDs in `TEMPLATE_DOC_IDS` (already filled in), and edit
+   the four Docs' wording to taste.
 4. **Deploy → Manage deployments →** edit the existing Web app deployment →
    **Deploy**. This publishes the new code on the **same `/exec` URL**, so the
    live site keeps posting with no change.
@@ -66,10 +61,12 @@ value.
 
 ## How the batch job works
 
-1. Reads all rows and parses the template Doc into `{ level: {subject, body} }`.
+1. Reads all rows and loads each level's email from its Doc into
+   `{ level: {subject, body} }`.
 2. Selects rows where **Evento = Completó** and **Cohort Procesado ≠ Yes**.
 3. Groups them by **Nivel VP** (Column K).
-4. Per group: creates a `Diagnostic Cohort - <level> - <date>` Doc listing the
-   members, then sends **one** email with the whole group in **BCC**.
+4. Per group: creates a `Diagnostic Cohort - <level> - <date>` tracking Doc
+   listing the members, then sends **one** email (that level's Doc text) with
+   the whole group in **BCC**.
 5. Stamps **Cohort Procesado = Yes** + the **Cohort Doc URL** on each row, so
    nobody is ever emailed twice.
